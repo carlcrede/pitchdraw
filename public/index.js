@@ -92,9 +92,9 @@ function triggerAttack( x, y ) {
 /* EVENT LISTENERS */
 
 window.onload = () => {
-    canvas.width = 1000;
-    canvas.height = 600;
-    canvas.style.cursor = 'crosshair'
+    canvas.style.cursor = "url('/cursor.png'), auto";
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;   
 }
 
 spaceBtn.onclick = () => {
@@ -106,15 +106,15 @@ clearBtn.onclick = () => {
 }
 
 canvas.addEventListener('mousemove', (event) => {
-    sketch(event);
-    let x = event.layerX, y = event.layerY;
-    move(x/canvas.width, y/canvas.height);
+    let mouse = getMousePos(canvas, event);
+    sketch(mouse);
+    move(mouse.x/canvas.width, mouse.y/canvas.height);
 });
 
 canvas.addEventListener('mousedown', (event) => {
-    startPainting(event);
-    let x = event.layerX, y = event.layerY;
-    triggerAttack(x/canvas.width, y/canvas.height);
+    let mouse = getMousePos(canvas, event);
+    startPainting(mouse);
+    triggerAttack(mouse.x/canvas.width, mouse.y/canvas.height);
 });
 
 canvas.addEventListener('mouseup', () => {
@@ -129,27 +129,35 @@ canvas.addEventListener('mouseup', () => {
 **  PAINT
 */
 
-function getPosition(event) {
-    coordinates.x = event.layerX;
-    coordinates.y = event.layerY;
+function getMousePos(canvas, event) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+        x: (event.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+        y: (event.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+    };
 }
 
-function startPainting(event) {
+function setMousePos(pos) {
+    coordinates.x = pos.x;
+    coordinates.y = pos.y;
+}
+
+function startPainting(mouse) {
     paint = true;
-    getPosition(event);
+    setMousePos(mouse);
 }
 
 function stopPainting() {
     paint = false;
 }
 
-function sketch(event) {
+function sketch(pos) {
     if (!paint) return;
     
     ctx.beginPath();
     ctx.lineCap = 'round';
     ctx.moveTo(coordinates.x, coordinates.y);
-    getPosition(event);
+    setMousePos(pos);
     ctx.lineTo(coordinates.x, coordinates.y);
     ctx.stroke();
 }

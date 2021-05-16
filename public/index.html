@@ -19,23 +19,34 @@
         #canvas {
             border: 1px solid black;
             background-color: whitesmoke;
+            width: 100%;
+            height: 100%;
+            cursor: url('/cursor.png');
         }
-    </style>
+
+        #canvasDiv {
+            padding-left: 15vw;
+            width: 70vw;
+            height: 60vh;
+        }
+
+     </style>
 </head>
 <body>
     <div class="canvas">
         <h1 style="color: whitesmoke;">Pitchdraw</h1>
     </div>
-    <div class="canvas">
+    <div id="canvasDiv" class="canvas">
         <canvas id="canvas"></canvas>
     </div>
+    <br>
     <div class="canvas">
         <button id="space_btn">Gimme some spacy music!</button>
         <button id="clear_btn">Clear canvas</button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.15/Tone.js"></script>
-    <script src="/index.js"></script>
+    <script defer src="/index.js"></script>
 
 </body>
 </html>
